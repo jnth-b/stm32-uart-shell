@@ -9,7 +9,7 @@ extern RingBuf_t rx_buf;
  * USART2 on PA2 (TX) and PA3 (RX)
  * Both pins hardwired to ST-LINK virtual COM port on the Nucleo.
  * AF7 = USART2. PCLK1 = 16 MHz (HSI, no PLL).
- * BRR for 115200 baud: 16000000 / 115200 ≈ 138.89 → 0x008B
+ * BRR for 115200 baud: 16000000 / 115200 ~ 138.89 -> 0x008B
  */
 
 void uart_init(void)
@@ -18,13 +18,13 @@ void uart_init(void)
     RCC->AHB1ENR |= RCC_AHB1ENR_GPIOAEN;
     RCC->APB1ENR |= RCC_APB1ENR_USART2EN;
 
-    /* PA2 → AF7 (TX) */
+    /* PA2 -> AF7 (TX) */
     GPIOA->MODER  &= ~(3U << 4);
     GPIOA->MODER  |=  (2U << 4);
     GPIOA->AFR[0] &= ~(0xFU << 8);
     GPIOA->AFR[0] |=  (7U   << 8);
 
-    /* PA3 → AF7 (RX) */
+    /* PA3 -> AF7 (RX) */
     GPIOA->MODER  &= ~(3U << 6);
     GPIOA->MODER  |=  (2U << 6);
     GPIOA->AFR[0] &= ~(0xFU << 12);
@@ -54,7 +54,7 @@ void uart_send_string(const char *s)
         uart_send_char(*s++);
 }
 
-/* USART2 RX interrupt — stuff byte into ring buffer */
+/* USART2 RX interrupt -- stuff byte into ring buffer */
 void USART2_IRQHandler(void)
 {
     if (USART2->SR & USART_SR_RXNE) {
@@ -62,14 +62,14 @@ void USART2_IRQHandler(void)
         rb_write(&rx_buf, c);
     }
 
-    /* clear overrun error to prevent ISR lockup (RM0390 §27.6.1) */
+    /* clear overrun error to prevent ISR lockup (RM0390 sec 27.6.1) */
     if (USART2->SR & USART_SR_ORE) {
         (void)USART2->SR;
         (void)USART2->DR;
     }
 }
 
-/* ---- DMA1 Stream6 Channel4 — USART2 TX (RM0390 Table 28) ---- */
+/* ---- DMA1 Stream6 Channel4 -- USART2 TX (RM0390 Table 28) ---- */
 
 #define TX_BUF_SIZE 256
 static char           tx_buf[TX_BUF_SIZE];

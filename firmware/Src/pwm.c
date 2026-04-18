@@ -3,7 +3,7 @@
 
 /*
  * TIM2 CH1 on PA5 (onboard LED LD2), AF1
- * PSC=15, ARR=99 → 16MHz / (16 * 100) = 10 kHz PWM
+ * PSC=15, ARR=99 -> 16MHz / (16 * 100) = 10 kHz PWM
  * CCR1 = 0..100 maps to duty cycle percentage
  */
 
@@ -12,7 +12,7 @@ void pwm_init(void)
     RCC->AHB1ENR |= RCC_AHB1ENR_GPIOAEN;
     RCC->APB1ENR |= RCC_APB1ENR_TIM2EN;
 
-    /* PA5 → AF1 */
+    /* PA5 -> AF1 */
     GPIOA->MODER  &= ~(3U << 10);
     GPIOA->MODER  |=  (2U << 10);
     GPIOA->AFR[0] &= ~(0xFU << 20);
